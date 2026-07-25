@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AniKingHub</string>
+    <string name="title_activity_main">AniKingHub</string>
+    <string name="package_name">com.anikinghub.app</string>
+    <string name="custom_url_scheme">com.anikinghub.app</string>
+</resources>
