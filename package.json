@@ -2,7 +2,7 @@
   "name": "anikinghub",
   "productName": "AniKingHub",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "electron.js",
   "scripts": {
     "dev": "vite",
@@ -12,10 +12,38 @@
     "lint": "oxlint",
     "preview": "vite preview"
   },
+  "build": {
+    "appId": "com.anikinghub.app",
+    "productName": "AniKingHub",
+    "icon": "public/icon.ico",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "1Hariton",
+        "repo": "Anime_app"
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AniKingHub"
+    },
+    "files": [
+      "dist/**/*",
+      "electron.js"
+    ],
+    "directories": {
+      "output": "dist_installer"
+    },
+    "npmRebuild": false
+  },
   "dependencies": {
     "@capacitor/android": "^8.4.2",
     "@capacitor/cli": "^8.4.2",
     "@capacitor/core": "^8.4.2",
+    "electron-updater": "^6.3.9",
     "hls.js": "^1.6.16",
     "lucide": "^1.26.0",
     "lucide-react": "^1.26.0",

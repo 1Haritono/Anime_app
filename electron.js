@@ -1,11 +1,17 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
+
+// Configure GitHub Releases Auto-Update
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 1380,
     height: 900,
-    title: "AniKingHub (Torrent & Watch Together)",
+    title: "AniKingHub",
+    icon: path.join(__dirname, 'public/icon.png'),
     backgroundColor: '#0f1015',
     webPreferences: {
       nodeIntegration: true,
@@ -14,10 +20,22 @@ function createWindow() {
     }
   });
 
-  if (process.env.NODE_ENV === 'development') {
-    win.loadURL('http://localhost:5173');
+  // Check GitHub for updates automatically
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on('update-available', () => {
+    win.webContents.send('update_available');
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    win.webContents.send('update_downloaded');
+  });
+
+  const indexPath = path.join(__dirname, 'dist/index.html');
+  if (require('fs').existsSync(indexPath)) {
+    win.loadFile(indexPath);
   } else {
-    win.loadFile(path.join(__dirname, 'dist/index.html'));
+    win.loadFile(path.join(__dirname, 'index.html'));
   }
 }
 

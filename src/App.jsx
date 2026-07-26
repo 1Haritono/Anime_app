@@ -70,6 +70,15 @@ export default function App() {
           </div>
 
           <div className="top-actions">
+            {/* Glowing Update Release Button */}
+            <button 
+              className="update-badge-btn" 
+              title="Доступно новое обновление на GitHub (v1.0.4)"
+              onClick={() => window.open('https://github.com/1Haritono/Anime_app/releases', '_blank')}
+            >
+              <Download size={14} /> <span>Обновить</span>
+            </button>
+
             {/* Watch Together Toggle */}
             <button 
               className={`top-action-btn ${watchTogetherActive ? 'active' : ''}`}
