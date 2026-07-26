@@ -33,7 +33,6 @@
     "files": [
       "dist/**/*",
       "electron.js",
-      "node_modules/**/*",
       "package.json"
     ],
     "directories": {
@@ -45,7 +44,6 @@
     "@capacitor/android": "^8.4.2",
     "@capacitor/cli": "^8.4.2",
     "@capacitor/core": "^8.4.2",
-    "electron-updater": "^6.8.9",
     "hls.js": "^1.6.16",
     "lucide": "^1.26.0",
     "lucide-react": "^1.26.0",

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Search, Calendar, Bookmark, User, Bell, Settings, 
-  Tv, Film, Sparkles, ExternalLink, PlayCircle, Star, Users, CheckCircle
+  Tv, Film, Sparkles, ExternalLink, PlayCircle, Star, Users, CheckCircle, Download
 } from 'lucide-react';
 import { MOCK_USER_PROFILE, MOCK_SCHEDULE, MOCK_RELATED_RELEASES, MOCK_SOURCES, MOCK_ICON_THEMES } from './data';
 import Player from './Player';
@@ -16,6 +16,25 @@ export default function App() {
   const [watchTogetherActive, setWatchTogetherActive] = useState(false);
   const [selectedAnime, setSelectedAnime] = useState(MOCK_RELATED_RELEASES[0]);
   const [selectedIconTheme, setSelectedIconTheme] = useState('dark-burgundy-gold-3d');
+  const [updateInfo, setUpdateInfo] = useState(null); // { version, url, notes }
+
+  // Слушаем сигнал от Electron main process о новом релизе
+  useEffect(() => {
+    const ipcRenderer = window.require ? window.require('electron')?.ipcRenderer : null;
+    if (!ipcRenderer) return;
+    const handler = (event, info) => setUpdateInfo(info);
+    ipcRenderer.on('update_available', handler);
+    return () => ipcRenderer.removeListener('update_available', handler);
+  }, []);
+
+  const handleOpenUpdate = () => {
+    const ipcRenderer = window.require ? window.require('electron')?.ipcRenderer : null;
+    if (ipcRenderer && updateInfo?.url) {
+      ipcRenderer.send('open_release_url', updateInfo.url);
+    } else if (updateInfo?.url) {
+      window.open(updateInfo.url, '_blank');
+    }
+  };
 
   // Handle Search Result Ordering (Seena first, then similar)
   const isSearchSeenaMatch = searchQuery.toLowerCase().includes('черный факел') || searchQuery.toLowerCase().includes('чёрный факел');
@@ -70,14 +89,16 @@ export default function App() {
           </div>
 
           <div className="top-actions">
-            {/* Glowing Update Release Button */}
-            <button 
-              className="update-badge-btn" 
-              title="Доступно новое обновление на GitHub (v1.0.4)"
-              onClick={() => window.open('https://github.com/1Haritono/Anime_app/releases', '_blank')}
-            >
-              <Download size={14} /> <span>Обновить</span>
-            </button>
+            {/* Glowing Update Release Button — загорается только при наличии нового релиза */}
+            {updateInfo && (
+              <button 
+                className="update-badge-btn" 
+                title={`Доступно обновление v${updateInfo.version} — нажми чтобы скачать`}
+                onClick={handleOpenUpdate}
+              >
+                <Download size={14} /> <span>v{updateInfo.version}</span>
+              </button>
+            )}
 
             {/* Watch Together Toggle */}
             <button 
