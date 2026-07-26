@@ -19,7 +19,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "1Hariton",
+        "owner": "1Haritono",
         "repo": "Anime_app"
       }
     ],
@@ -32,7 +32,9 @@
     },
     "files": [
       "dist/**/*",
-      "electron.js"
+      "electron.js",
+      "node_modules/**/*",
+      "package.json"
     ],
     "directories": {
       "output": "dist_installer"
@@ -43,7 +45,7 @@
     "@capacitor/android": "^8.4.2",
     "@capacitor/cli": "^8.4.2",
     "@capacitor/core": "^8.4.2",
-    "electron-updater": "^6.3.9",
+    "electron-updater": "^6.8.9",
     "hls.js": "^1.6.16",
     "lucide": "^1.26.0",
     "lucide-react": "^1.26.0",
