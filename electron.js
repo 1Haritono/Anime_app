@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, session } = require('electron');
 const path = require('path');
 const https = require('https');
 
@@ -80,6 +80,15 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // Фикс постеров Shikimori — добавляем Referer заголовок
+  session.defaultSession.webRequest.onBeforeSendHeaders(
+    { urls: ['https://shikimori.one/*', 'https://*.shikimori.one/*'] },
+    (details, callback) => {
+      details.requestHeaders['Referer'] = 'https://shikimori.one/';
+      details.requestHeaders['Origin']  = 'https://shikimori.one';
+      callback({ requestHeaders: details.requestHeaders });
+    }
+  );
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
